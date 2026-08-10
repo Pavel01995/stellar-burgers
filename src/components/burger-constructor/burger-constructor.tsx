@@ -7,7 +7,7 @@ import {
   clearConstructor
 } from '../../services/slices/constructorSlice';
 import { fetchOrder, clearOrder } from '../../services/slices/orderSlice';
-import { getUser } from '../../services/slices/authSlice';
+import { getUserData } from '../../services/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
@@ -23,7 +23,7 @@ export const BurgerConstructor: FC = () => {
   const orderRequest = useSelector((state) => state.order?.loading || false);
   const orderModalData = useSelector((state) => state.order?.order || null);
 
-  const user = useSelector(getUser);
+  const user = useSelector(getUserData);
 
   const onOrderClick = () => {
     if (!user) {

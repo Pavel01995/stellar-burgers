@@ -13,7 +13,6 @@ const getOrders = (orders: TOrder[], status: string): number[] =>
 export const FeedInfo: FC = () => {
   const feedData = useSelector((state) => state.feeds);
 
-  // Достаем массив заказов и саму статистику из слайса feeds
   const orders: TOrder[] = feedData?.orders || [];
   const feed = {
     total: feedData?.total,

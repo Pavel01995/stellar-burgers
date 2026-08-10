@@ -37,7 +37,6 @@ export const constructorSlice = createSlice({
       );
     },
 
-    // clearConstructor теперь находится на правильном месте (на уровне с другими редьюсерами)
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];

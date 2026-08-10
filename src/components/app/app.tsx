@@ -13,18 +13,24 @@ import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import '../../index.css';
 import styles from './app.module.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { useDispatch } from '../../services/store';
+import { getUser } from '../../services/slices/authSlice';
 
 export default function App() {
+  const dispatch = useDispatch();
   const location = useLocation();
   const background = location.state?.background;
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
       <AppHeader />
 
-      {/* Основные роуты */}
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
@@ -35,6 +41,8 @@ export default function App() {
         <Route element={<ProtectedRoute onlyUnAuth />}>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -47,7 +55,6 @@ export default function App() {
         <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {/* Модальные окна поверх фона, если есть background */}
       {background && (
         <Routes>
           <Route

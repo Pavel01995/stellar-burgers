@@ -8,7 +8,6 @@ export const IngredientsCategory = forwardRef<
   HTMLUListElement,
   TIngredientsCategoryProps
 >(({ title, titleRef, ingredients }, ref) => {
-  // Берем данные конструктора из Redux-стора
   const burgerConstructor = useSelector((state) => state.burgerConstructor);
 
   const ingredientsCounters = useMemo(() => {

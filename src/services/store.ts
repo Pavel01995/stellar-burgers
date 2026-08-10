@@ -4,6 +4,7 @@ import { authReducer } from './slices/authSlice';
 import { orderReducer } from './slices/orderSlice';
 import { feedReducer } from './slices/feedSlice';
 import { constructorSlice } from './slices/constructorSlice';
+import { ordersReducer } from './slices/ordersSlice';
 
 import {
   TypedUseSelectorHook,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   order: orderReducer,
   feeds: feedReducer,
-  burgerConstructor: constructorSlice.reducer
+  burgerConstructor: constructorSlice.reducer,
+  orders: ordersReducer
 });
 
 const store = configureStore({

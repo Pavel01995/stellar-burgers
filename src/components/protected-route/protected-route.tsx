@@ -1,13 +1,20 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useSelector } from '../../services/store';
+import { getUserData, getAuthLoading } from '../../services/slices/authSlice';
+import { Preloader } from '@ui';
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
 };
 
 export const ProtectedRoute = ({ onlyUnAuth = false }: ProtectedRouteProps) => {
-  const user = useSelector((state) => state.auth?.user);
+  const user = useSelector(getUserData);
+  const loading = useSelector(getAuthLoading);
   const location = useLocation();
+
+  if (loading && !user) {
+    return <Preloader />;
+  }
 
   if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };

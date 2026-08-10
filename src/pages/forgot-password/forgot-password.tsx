@@ -13,13 +13,20 @@ export const ForgotPassword: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
+    if (!email.trim()) {
+      return;
+    }
+
     setError(null);
+
     forgotPasswordApi({ email })
       .then(() => {
         localStorage.setItem('resetPassword', 'true');
         navigate('/reset-password', { replace: true });
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        setError(err);
+      });
   };
 
   return (
