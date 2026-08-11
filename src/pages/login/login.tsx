@@ -18,13 +18,15 @@ export const Login: FC = () => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    dispatch(loginUser({ email, password }))
+    dispatch(loginUser({ email, password })) // или registerUser
       .unwrap()
       .then(() => {
-        navigate('/');
+        const state = location.state as { from?: { pathname: string } };
+        const from = state?.from || { pathname: '/' };
+        navigate(from, { replace: true });
       })
       .catch((err) => {
-        console.error('Ошибка входа:', err);
+        console.error('Ошибка:', err);
       });
   };
 

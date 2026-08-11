@@ -17,6 +17,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useDispatch } from '../../services/store';
 import { getUser } from '../../services/slices/authSlice';
+import { fetchIngredients } from '../../services/slices/ingridientsSlice';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -24,8 +25,9 @@ export default function App() {
   const background = location.state?.background;
 
   useEffect(() => {
+    dispatch(fetchIngredients());
     dispatch(getUser());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className={styles.app}>
@@ -95,3 +97,6 @@ export default function App() {
     </div>
   );
 }
+
+
+//ЗДРАВСТВУЙТЕ!

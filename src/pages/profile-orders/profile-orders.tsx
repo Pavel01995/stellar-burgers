@@ -7,6 +7,7 @@ import {
   getUserOrders,
   getOrdersLoading
 } from '../../services/slices/ordersSlice';
+import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export const ProfileOrders: FC = () => {
   }, [dispatch]);
 
   if (isLoading) {
+    return <Preloader />;
   }
 
   return <ProfileOrdersUI orders={orders} />;

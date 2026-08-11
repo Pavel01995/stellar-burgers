@@ -1,30 +1,28 @@
-import { FC, useEffect, useState, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
-import { TIngredient, TOrder } from '@utils-types';
-import { useSelector } from '../../services/store';
-import { getOrderByNumberApi } from '@api';
+import { TIngredient } from '@utils-types';
+import { useDispatch, useSelector } from '../../services/store';
+import {
+  fetchOrderByNumber,
+  getOrderData
+} from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   const { number } = useParams<{ number: string }>();
-  const [orderData, setOrderData] = useState<TOrder | null>(null);
+  const dispatch = useDispatch();
 
+  const orderData = useSelector(getOrderData);
   const ingredients: TIngredient[] = useSelector(
     (state) => state.ingredients.ingredients
   );
 
   useEffect(() => {
     if (number) {
-      getOrderByNumberApi(Number(number))
-        .then((data) => {
-          if (data.orders && data.orders.length > 0) {
-            setOrderData(data.orders[0]);
-          }
-        })
-        .catch((err) => console.error(err));
+      dispatch(fetchOrderByNumber(Number(number)));
     }
-  }, [number]);
+  }, [dispatch, number]);
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;

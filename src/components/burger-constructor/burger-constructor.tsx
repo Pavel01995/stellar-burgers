@@ -40,13 +40,18 @@ export const BurgerConstructor: FC = () => {
       ),
       constructorItems.bun._id
     ];
-
-    dispatch(fetchOrder(ingredientIds));
+    dispatch(fetchOrder(ingredientIds))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+      })
+      .catch((err) => {
+        console.error('Ошибка при создании заказа:', err);
+      });
   };
 
   const closeOrderModal = () => {
     dispatch(clearOrder());
-    dispatch(clearConstructor());
   };
 
   const handleRemove = (id: string) => {
