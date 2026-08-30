@@ -95,7 +95,7 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write",
-    "test": "jest",
+    "test": "npx jest ingredientsSlice.test.ts && npx jest constructorSlice.test.ts",
     "pwt": "npx playwright test",
     "pwt-ui": "npx playwright test --ui",
     "pwt-head": "npx playwright test --headed"

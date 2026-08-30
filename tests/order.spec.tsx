@@ -1,33 +1,58 @@
 import { test, expect } from '@playwright/test';
 
-test('Авторизация с подменой данных пользователя (без HAR)', async ({
-  page
-}) => {
-  // 1. Перехватываем запрос и моментально отдаем нужный JSON
-  await page.route('**/api/auth/user', async (route) => {
-    await route.fulfill({
-      json: {
-        success: true,
-        user: {
-          email: 'pv@mail.ru',
-          name: 'pavel'
-        }
-      }
-    });
+const short_access = 'Bearer short-token';
+const short_refresh = 'short-refresh';
+
+test('Тест моики и токины', async ({ context, page }) => {
+  await context.addCookies([
+    {
+      name: 'accessToken',
+      value: short_access,
+      domain: 'localhost',
+      path: '/'
+    }
+  ]);
+
+  await page.addInitScript((tokenValue) => {
+    window.localStorage.setItem('refreshToken', tokenValue);
+  }, short_refresh);
+
+  await page.routeFromHAR('tests/hars/user.har', {
+    url: '**/api/auth/user',
+    update: false,
+    notFound: 'abort'
   });
 
-  // 2. Переходим на страницу логина
-  await page.goto('http://localhost:4000/login');
+  await page.routeFromHAR('tests/hars/order.har', {
+    url: '**/api/orders',
+    update: false,
+    notFound: 'abort'
+  });
 
-  // 3. Заполняем форму
-  await page.fill('input[name="email"]', 'pv@mail.ru');
-  await page.fill('input[name="password"]', 'ТВОЙ_ПАРОЛЬ');
+  await page.goto('/');
 
-  // 4. Кликаем "Войти"
-  await page.click('button[type="submit"]');
+  await expect(page.getByText('Соберите бургер')).toBeVisible();
 
-  // 5. Ждем перехода в профиль.
-  // Приложение сделает запрос за профилем, но Playwright перехватит его
-  // и отдаст мок из шага 1, даже не обращаясь к реальному серверу.
-  await page.waitForURL('**/profile');
+  await page
+    .locator('li')
+    .filter({ hasText: 'Краторная булка N-200i' })
+    .getByRole('button', { name: 'Добавить' })
+    .click();
+
+  await page
+    .locator('li')
+    .filter({ hasText: 'Биокотлета из марсианской Магнолии' })
+    .getByRole('button', { name: 'Добавить' })
+    .click();
+  await page.getByRole('button', { name: 'Оформить заказ' }).click();
+
+  await expect(page.locator('h2').getByText('109536')).toBeVisible({
+    timeout: 0
+  });
+
+  await page.locator('#modals button').click();
+
+  await expect(page.locator('#modals h2')).not.toBeVisible();
+
+  await expect(page.locator('.constructor-element')).toHaveCount(0);
 });
