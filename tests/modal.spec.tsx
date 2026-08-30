@@ -40,7 +40,7 @@ test.describe('проверка модальных окон', () => {
     await page
       .locator('#modals > div')
       .filter({ hasNotText: 'Детали ингредиента' })
-      .click({ position: { x: 0, y: 0 } }); 
+      .click({ position: { x: 0, y: 0 } });
     await expect(page.locator('text=Детали ингредиента')).not.toBeVisible();
   });
 });
