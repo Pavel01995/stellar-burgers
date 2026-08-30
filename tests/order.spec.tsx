@@ -24,40 +24,16 @@ test.describe('Тестирование функционала бургера и
       notFound: 'abort'
     });
 
-    await page.routeFromHAR('tests/hars/order.har', {   //Здравствуйте не смог реализовать запрос через HAR,
-      url: '**/api/orders',                              //не в какую не поддается постаил через  route.
+    await page.routeFromHAR('tests/hars/order.har', {
+      url: '**/api/orders',
       update: false,
       notFound: 'abort'
     });
 
-    // await page.route('**/api/orders', async (route) => {
-    //   await route.fulfill({
-    //     status: 200,
-    //     contentType: 'application/json',
-    //     body: JSON.stringify({
-    //       success: true,
-    //       name: 'Био-марсианский краторный бургер',
-    //       order: {
-    //         number: 109536
-    //       }
-    //     })
-    //   });
-    // });
-
     await page.goto('/');
-
   });
 
-
-
-
-
-
-
-  
-
-
-   test('оформление заказа', async ({page})=>{  
+  test('оформление заказа', async ({ page }) => {
     await expect(page.getByText('Соберите бургер')).toBeVisible();
 
     await page
@@ -73,7 +49,7 @@ test.describe('Тестирование функционала бургера и
       .click();
     await page.getByRole('button', { name: 'Оформить заказ' }).click();
 
-    await expect(page.locator('h2').getByText('109536')).toBeVisible({
+    await expect(page.locator('h2').getByText('109564')).toBeVisible({
       timeout: 0
     });
 
@@ -84,4 +60,3 @@ test.describe('Тестирование функционала бургера и
     await expect(page.locator('.constructor-element')).toHaveCount(0);
   });
 });
- 
