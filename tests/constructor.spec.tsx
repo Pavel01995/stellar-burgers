@@ -19,9 +19,7 @@ test.describe('проверка функциональности констру�
     await expect(
       page
         .locator('.constructor-element')
-        .filter({ hasText: 'Краторная булка N-200i' })
-        .first()
-    ).toBeVisible();
+        .filter({ hasText: 'Краторная булка N-200i' })).toHaveCount(2);
   });
 
   test('добавить начинку в конструктора', async ({ page }) => {

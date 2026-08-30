@@ -27,7 +27,18 @@ describe('Тесты для редьюсера ingredients', () => {
       type: fetchIngredients.fulfilled.type,
       payload: mockIngredients
     };
+
+    const result=ingredientsReducer(
+      {...initialState, loading:true},
+      action
+    );
+    expect(result).toEqual({
+      ...initialState,
+      loading:false,
+      ingredients:mockIngredients
+    })
   });
+  
 
   test('должен обрабатывать fetchIngredients.rejected', () => {
     const action = {

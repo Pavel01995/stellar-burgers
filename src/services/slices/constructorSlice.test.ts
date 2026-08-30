@@ -18,15 +18,18 @@ describe('тесты для редьюсеров ConstructorSlice', () => {
     const bun = { _id: '1', name: 'Булка', type: 'bun' };
     const action = addIngredient(bun as any);
     const result = constructorReducer(initialState, action);
-    expect(result.bun).toMatchObject({
-      ...bun,
-      id: expect.any(String)
+    expect(result).toEqual({
+      ...initialState,
+      bun: {
+        ...bun,
+        id: expect.any(String)
+      }
     });
   });
 
   test('должен удалять ингредиент по id', () => {
     const startState = {
-      bun: null,
+      ...initialState,
       ingredients: [
         {
           _id: '2',
@@ -39,12 +42,15 @@ describe('тесты для редьюсеров ConstructorSlice', () => {
     };
     const action = removeIngredient('ingredient-123');
     const result = constructorReducer(startState as any, action);
-    expect(result.ingredients).toHaveLength(0);
+    expect(result).toEqual({
+      ...initialState,
+      ingredients: []
+    });
   });
 
   test('должен перемещать ингредиент вверх по списку', () => {
     const startState = {
-      bun: null,
+      ...initialState,
       ingredients: [
         { _id: '1', name: 'Первый', type: 'main', price: 50, id: 'id-1' },
         { _id: '2', name: 'Второй', type: 'main', price: 60, id: 'id-2' }
@@ -58,7 +64,7 @@ describe('тесты для редьюсеров ConstructorSlice', () => {
 
   test('должен перемещать ингредиент вниз по списку', () => {
     const startState = {
-      bun: null,
+      ...initialState,
       ingredients: [
         { _id: '1', name: 'Первый', type: 'main', price: 50, id: 'id-1' },
         { _id: '2', name: 'Второй', type: 'main', price: 60, id: 'id-2' }
@@ -67,12 +73,18 @@ describe('тесты для редьюсеров ConstructorSlice', () => {
 
     const result = constructorReducer(startState as any, moveDown(0));
 
-    expect(result.ingredients[0].id).toBe('id-2');
-    expect(result.ingredients[1].id).toBe('id-1');
+    expect(result).toEqual({
+      ...initialState,
+      ingredients: [
+        { _id: '2', name: 'Второй', type: 'main', price: 60, id: 'id-2' },
+        { _id: '1', name: 'Первый', type: 'main', price: 50, id: 'id-1' }
+      ]
+    });
   });
 
   test('должен полностью очищать конструктор', () => {
     const startState = {
+      ...initialState,
       bun: { _id: 'bun-1', name: 'Булка', type: 'bun', price: 200, id: 'b-1' },
       ingredients: [
         { _id: '1', name: 'Соус', type: 'main', price: 50, id: 'id-1' }
